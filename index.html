@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Night-Out Check-In · Camp Sequassen</title>
+<title>Night-Out Log · Camp Sequassen</title>
 <style>
   :root{
     --night-0:#0c1521;
@@ -27,14 +27,11 @@
       linear-gradient(180deg,var(--night-0),var(--night-1) 55%,var(--night-2));
     color:var(--ink);
     min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
+    display:flex;justify-content:center;align-items:flex-start;
     padding:24px 16px 48px;
   }
   .card{
-    width:100%;
-    max-width:440px;
+    width:100%;max-width:440px;
     background:rgba(20,33,49,.72);
     border:1px solid var(--line);
     border-radius:20px;
@@ -42,27 +39,30 @@
     backdrop-filter:blur(6px);
     box-shadow:0 18px 50px rgba(0,0,0,.45);
   }
-  .eyebrow{
-    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--muted);margin:0 0 4px;
-  }
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
   h1{font-size:23px;line-height:1.2;margin:0 0 4px;font-weight:650}
-  .sub{color:var(--muted);font-size:14px;margin:0 0 20px;line-height:1.45}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 18px;line-height:1.45}
+
+  /* Direction toggle */
+  .toggle{display:flex;gap:8px;margin-bottom:18px}
+  .toggle button{
+    flex:1;margin-top:0;width:auto;
+    background:var(--night-0);color:var(--muted);
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:13px;font-size:15px;font-weight:600;cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .toggle button.active{background:var(--lantern);color:#1a1206;border-color:var(--lantern)}
 
   /* Lantern status */
   .lantern{
     display:flex;align-items:center;gap:13px;
-    border:1px solid var(--line);
-    border-radius:var(--radius);
+    border:1px solid var(--line);border-radius:var(--radius);
     padding:13px 15px;margin-bottom:20px;
     background:rgba(12,21,33,.55);
     transition:border-color .3s, background .3s;
   }
-  .flame{
-    width:14px;height:14px;border-radius:50%;flex:0 0 auto;
-    background:var(--lantern-dim);
-    box-shadow:0 0 0 0 rgba(232,162,61,.5);
-  }
+  .flame{width:14px;height:14px;border-radius:50%;flex:0 0 auto;background:var(--lantern-dim);box-shadow:0 0 0 0 rgba(232,162,61,.5)}
   .lantern.searching .flame{background:var(--lantern);animation:pulse 1.4s ease-out infinite}
   .lantern.ok{border-color:rgba(79,168,104,.5);background:rgba(79,168,104,.08)}
   .lantern.ok .flame{background:var(--ok);animation:none;box-shadow:0 0 12px rgba(79,168,104,.6)}
@@ -80,36 +80,24 @@
   .field{margin-bottom:16px}
   input[type=text]{
     width:100%;font-size:16px;color:var(--ink);
-    background:var(--night-0);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:13px 14px;
-    transition:border-color .15s;
+    background:var(--night-0);border:1px solid var(--line);
+    border-radius:var(--radius);padding:13px 14px;transition:border-color .15s;
   }
   input[type=text]:focus{outline:none;border-color:var(--lantern)}
   input::placeholder{color:#566a80}
 
   button{
-    width:100%;font-size:16px;font-weight:600;
-    color:#1a1206;background:var(--lantern);
-    border:none;border-radius:var(--radius);
-    padding:15px;margin-top:6px;cursor:pointer;
+    width:100%;font-size:16px;font-weight:600;color:#1a1206;background:var(--lantern);
+    border:none;border-radius:var(--radius);padding:15px;margin-top:6px;cursor:pointer;
     transition:opacity .15s, transform .05s;
   }
   button:active{transform:translateY(1px)}
   button:disabled{background:#3a4a5c;color:#7d8ea0;cursor:not-allowed}
 
-  .recheck{
-    background:none;color:var(--lantern);font-weight:500;
-    font-size:13.5px;padding:8px;margin-top:10px;
-    text-decoration:underline;text-underline-offset:3px;
-  }
+  .recheck{background:none;color:var(--lantern);font-weight:500;font-size:13.5px;padding:8px;margin-top:10px;text-decoration:underline;text-underline-offset:3px}
   .recheck:disabled{color:var(--muted);text-decoration:none}
 
-  .toast{
-    margin-top:16px;padding:13px 15px;border-radius:var(--radius);
-    font-size:14px;line-height:1.45;display:none;
-  }
+  .toast{margin-top:16px;padding:13px 15px;border-radius:var(--radius);font-size:14px;line-height:1.45;display:none}
   .toast.show{display:block}
   .toast.ok{background:rgba(79,168,104,.12);border:1px solid rgba(79,168,104,.45);color:#bfe6cb}
   .toast.bad{background:rgba(224,88,79,.12);border:1px solid rgba(224,88,79,.45);color:#f3c4c0}
@@ -120,8 +108,13 @@
 <body>
   <main class="card">
     <p class="eyebrow">Camp Sequassen · Staff</p>
-    <h1>Night-Out Check-In</h1>
-    <p class="sub">Fill this out once you're back on property. We'll confirm your location before the check-in can be submitted.</p>
+    <h1>Night-Out Log</h1>
+    <p class="sub" id="sub">Choose check-out or check-in to begin.</p>
+
+    <div class="toggle">
+      <button id="btnOut" type="button">Check Out</button>
+      <button id="btnIn"  type="button">Check In</button>
+    </div>
 
     <div id="lantern" class="lantern searching">
       <span class="flame"></span>
@@ -137,21 +130,21 @@
     </div>
 
     <div class="field">
-      <label for="buddy">Who you were with</label>
+      <label for="buddy" id="labelBuddy">Who you're with</label>
       <input type="text" id="buddy" placeholder="Buddy or group">
     </div>
 
     <div class="field">
-      <label for="dest">Where you went</label>
+      <label for="dest" id="labelDest">Where you're headed</label>
       <input type="text" id="dest" placeholder="Destination of your night out">
     </div>
 
-    <button id="submitBtn" disabled>Confirm location to submit</button>
+    <button id="submitBtn" disabled>Choose check-out or check-in</button>
     <button id="recheckBtn" class="recheck" type="button" disabled>Re-check my location</button>
 
     <div id="toast" class="toast"></div>
 
-    <p class="foot">Your location is used only to confirm you're back on property. It is not tracked.</p>
+    <p class="foot">Your location is used only to confirm you're on property. It is not tracked.</p>
   </main>
 
 <script>
@@ -164,11 +157,16 @@ const PROPERTY = {
   radiusMeters: 3000    // <-- change this number to tighten/loosen the geofence
 };
 
-// 2) Paste your Google Apps Script Web App URL here (see setup instructions)
+// 2) Paste your Google Apps Script Web App URL (ends in /exec) between the quotes:
 const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbx2MFDXKvEmqzkYhJLOiqwDhjO7iBNlE_b-1dZLPHopbUvLd9maNqrJ7DlktiMEDB7QhA/exec";
 
 /* =========================================================================== */
 
+const sub       = document.getElementById('sub');
+const btnOut    = document.getElementById('btnOut');
+const btnIn     = document.getElementById('btnIn');
+const labelBuddy= document.getElementById('labelBuddy');
+const labelDest = document.getElementById('labelDest');
 const lantern   = document.getElementById('lantern');
 const statusText= document.getElementById('statusText');
 const distText  = document.getElementById('distText');
@@ -177,36 +175,66 @@ const recheckBtn= document.getElementById('recheckBtn');
 const toast     = document.getElementById('toast');
 
 let onProperty = false;
-let lastFix = null; // {lat, lng, accuracy, distance}
+let lastFix = null;       // {lat,lng,accuracy,distance}
+let direction = null;     // 'out' | 'in'
 
 // Haversine distance in meters
 function distanceMeters(lat1, lon1, lat2, lon2){
-  const R = 6371000;
-  const toRad = d => d * Math.PI / 180;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
+  const R = 6371000, toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
   const a = Math.sin(dLat/2)**2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-            Math.sin(dLon/2)**2;
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-function setLantern(state, main, sub){
+function setDirection(dir){
+  direction = dir;
+  btnOut.classList.toggle('active', dir === 'out');
+  btnIn.classList.toggle('active', dir === 'in');
+  if(dir === 'out'){
+    sub.textContent = "Heading out? Confirm you're on property, then log your check-out.";
+    labelBuddy.textContent = "Who you're going with";
+    labelDest.textContent  = "Where you're headed";
+  }else{
+    sub.textContent = "Back from your night out? Confirm you're on property, then log your check-in.";
+    labelBuddy.textContent = "Who you were with";
+    labelDest.textContent  = "Where you went";
+  }
+  updateSubmit();
+}
+
+function updateSubmit(){
+  if(!direction){
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Choose check-out or check-in';
+    return;
+  }
+  if(!onProperty){
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Not on property yet';
+    return;
+  }
+  submitBtn.disabled = false;
+  submitBtn.textContent = direction === 'out' ? 'Check out' : 'Check in';
+}
+
+function setLantern(state, main, sub2){
   lantern.className = 'lantern ' + state;
   statusText.childNodes[0].nodeValue = main + ' ';
-  distText.textContent = sub;
+  distText.textContent = sub2;
 }
 
 function checkLocation(){
   if(!('geolocation' in navigator)){
+    onProperty = false;
     setLantern('bad','Location not available','This device or browser does not support location.');
+    updateSubmit();
     return;
   }
   onProperty = false;
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Confirm location to submit';
   recheckBtn.disabled = true;
   setLantern('searching','Checking your location…','Allow location access when your phone asks.');
+  updateSubmit();
 
   navigator.geolocation.getCurrentPosition(
     pos => {
@@ -214,28 +242,26 @@ function checkLocation(){
       const d = distanceMeters(latitude, longitude, PROPERTY.lat, PROPERTY.lng);
       lastFix = {lat:latitude, lng:longitude, accuracy, distance:d};
       recheckBtn.disabled = false;
-
       if(d <= PROPERTY.radiusMeters){
         onProperty = true;
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit check-in';
-        setLantern('ok','You\u2019re back on property',
+        setLantern('ok','You\u2019re on property',
           `${Math.round(d)} m from camp center · accuracy \u00b1${Math.round(accuracy)} m`);
       }else{
         onProperty = false;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Not on property yet';
         setLantern('bad','You\u2019re not on property yet',
           `${Math.round(d)} m from camp center \u2014 need to be within ${PROPERTY.radiusMeters} m. Re-check once you arrive.`);
       }
+      updateSubmit();
     },
     err => {
+      onProperty = false;
       recheckBtn.disabled = false;
       let msg = 'Could not get your location.';
       if(err.code === 1) msg = 'Location permission denied. Enable it in your browser settings, then re-check.';
       else if(err.code === 2) msg = 'Location unavailable. Move to open sky and re-check.';
       else if(err.code === 3) msg = 'Location timed out. Re-check.';
       setLantern('bad','Location check failed', msg);
+      updateSubmit();
     },
     { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
   );
@@ -247,17 +273,19 @@ function showToast(kind, msg){
 }
 
 async function submit(){
+  if(!direction){ showToast('bad','Choose check-out or check-in first.'); return; }
   if(!onProperty || !lastFix) return;
+
   const name  = document.getElementById('name').value.trim();
   const buddy = document.getElementById('buddy').value.trim();
   const dest  = document.getElementById('dest').value.trim();
-
   if(!name){ showToast('bad','Please enter your name.'); return; }
 
   submitBtn.disabled = true;
   submitBtn.textContent = 'Submitting…';
 
   const payload = {
+    direction: direction === 'out' ? 'Check Out' : 'Check In',
     timestamp: new Date().toISOString(),
     name, buddy, destination: dest,
     lat: lastFix.lat.toFixed(6),
@@ -269,23 +297,30 @@ async function submit(){
 
   try{
     await fetch(SHEET_ENDPOINT, {
-      method:'POST',
-      mode:'no-cors',
+      method:'POST', mode:'no-cors',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
       body: JSON.stringify(payload)
     });
-    // no-cors gives an opaque response; the Sheet is the source of truth.
-    showToast('ok', `Thanks ${name.split(' ')[0]} \u2014 your check-in is recorded. Get some rest.`);
-    submitBtn.textContent = 'Checked in \u2713';
+    const first = name.split(' ')[0];
+    if(direction === 'out'){
+      showToast('ok', `Checked out \u2014 have a good night, ${first}.`);
+      submitBtn.textContent = 'Checked out \u2713';
+    }else{
+      showToast('ok', `Checked in \u2014 welcome back, ${first}. Get some rest.`);
+      submitBtn.textContent = 'Checked in \u2713';
+    }
     document.querySelectorAll('input').forEach(i=>i.disabled=true);
+    btnOut.disabled = true; btnIn.disabled = true;
     recheckBtn.disabled = true;
   }catch(e){
     showToast('bad','Could not reach the server. Check your connection and try again.');
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit check-in';
+    submitBtn.textContent = direction === 'out' ? 'Check out' : 'Check in';
   }
 }
 
+btnOut.addEventListener('click', () => setDirection('out'));
+btnIn.addEventListener('click',  () => setDirection('in'));
 submitBtn.addEventListener('click', submit);
 recheckBtn.addEventListener('click', checkLocation);
 window.addEventListener('load', checkLocation);
