@@ -103,6 +103,33 @@
   .toast.bad{background:rgba(224,88,79,.12);border:1px solid rgba(224,88,79,.45);color:#f3c4c0}
 
   .foot{margin-top:18px;font-size:11.5px;color:#5c7186;text-align:center;line-height:1.5}
+
+  /* Help / troubleshooting */
+  .help{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
+  .help > summary{
+    list-style:none;cursor:pointer;font-size:14px;font-weight:600;
+    color:var(--lantern);display:flex;align-items:center;gap:8px;
+  }
+  .help > summary::-webkit-details-marker{display:none}
+  .help > summary::before{content:"\25B8";transition:transform .15s;font-size:12px}
+  .help[open] > summary::before{transform:rotate(90deg)}
+  .help-body{margin-top:12px}
+  .help details{
+    border:1px solid var(--line);border-radius:var(--radius);
+    margin-bottom:8px;background:rgba(12,21,33,.5);overflow:hidden;
+  }
+  .help details > summary{
+    list-style:none;cursor:pointer;padding:12px 14px;
+    font-size:13.5px;font-weight:600;color:var(--ink);
+  }
+  .help details > summary::-webkit-details-marker{display:none}
+  .help details[open] > summary{border-bottom:1px solid var(--line)}
+  .help .steps{padding:12px 14px 14px;font-size:13px;line-height:1.55;color:var(--muted)}
+  .help .steps ol{margin:0;padding-left:18px}
+  .help .steps li{margin-bottom:7px}
+  .help .steps li:last-child{margin-bottom:0}
+  .help .steps strong{color:var(--ink);font-weight:600}
+  .help .tip{margin-top:10px;font-size:12px;color:#6f859b}
 </style>
 </head>
 <body>
@@ -143,6 +170,83 @@
     <button id="recheckBtn" class="recheck" type="button" disabled>Re-check my location</button>
 
     <div id="toast" class="toast"></div>
+
+    <details class="help">
+      <summary>Location not working? Tap for help</summary>
+      <div class="help-body">
+
+        <details>
+          <summary>The lantern stays red — "permission denied"</summary>
+          <div class="steps">
+            <ol>
+              <li>Your browser is blocking location. The fixes below depend on which phone and browser you're using — open the matching one.</li>
+              <li>After changing any setting, come back and tap <strong>"Re-check my location."</strong></li>
+            </ol>
+          </div>
+        </details>
+
+        <details>
+          <summary>iPhone — Safari</summary>
+          <div class="steps">
+            <ol>
+              <li>Open <strong>Settings → Privacy &amp; Security → Location Services</strong> and make sure the top toggle is <strong>On</strong>.</li>
+              <li>In that same list, scroll to <strong>Safari Websites</strong> and set it to <strong>"While Using the App"</strong> or <strong>"Ask Next Time."</strong> If it says "Never," that's the problem.</li>
+              <li>Back in Safari on this page, tap <strong>"aA"</strong> in the address bar → <strong>Website Settings → Location → Allow</strong>, then reload.</li>
+              <li>Still stuck? <strong>Settings → Safari → Clear History and Website Data</strong> wipes a remembered "no," then reopen the link.</li>
+            </ol>
+            <div class="tip">Tip: turn off Lockdown Mode and any content blockers — they can silently block location.</div>
+          </div>
+        </details>
+
+        <details>
+          <summary>iPhone — Chrome</summary>
+          <div class="steps">
+            <ol>
+              <li>Open <strong>Settings → Privacy &amp; Security → Location Services</strong> → scroll to <strong>Chrome</strong> → set to <strong>"While Using the App."</strong> If it says "Never," Chrome can't even ask.</li>
+              <li>Reopen this page in Chrome. When Chrome's own <strong>Allow</strong> prompt appears, tap it.</li>
+              <li>If no prompt appears, tap the page-settings icon in the address bar (or the <strong>•••</strong> menu) → <strong>Location → Allow</strong>, then reload.</li>
+              <li>Still nothing? Chrome <strong>•••</strong> → <strong>Settings → Privacy → Clear Browsing Data → Cookies, Site Data</strong>, then reopen the link.</li>
+            </ol>
+            <div class="tip">Safari and Chrome each need their own permission — fixing one doesn't fix the other.</div>
+          </div>
+        </details>
+
+        <details>
+          <summary>Android — Chrome</summary>
+          <div class="steps">
+            <ol>
+              <li>Swipe down to <strong>Quick Settings</strong> and confirm <strong>Location</strong> is on.</li>
+              <li>Open <strong>Settings → Apps → Chrome → Permissions → Location</strong> and set it to <strong>"Allow only while using."</strong></li>
+              <li>On this page, tap the <strong>lock/tune icon</strong> left of the address bar → <strong>Permissions → Location → Allow</strong>, then reload.</li>
+              <li>Still stuck? Chrome <strong>⋮</strong> → <strong>Settings → Site settings → Location</strong>, find this site, set to Allow.</li>
+            </ol>
+          </div>
+        </details>
+
+        <details>
+          <summary>It's stuck on "Checking your location…"</summary>
+          <div class="steps">
+            <ol>
+              <li>This is usually a weak signal indoors, not a denial. Step <strong>outside or near a window</strong> with open sky.</li>
+              <li>Tap <strong>"Re-check my location."</strong> It can take 10–15 seconds for the first fix.</li>
+              <li>Make sure the phone isn't in <strong>Airplane Mode</strong> and has signal or Wi-Fi.</li>
+            </ol>
+          </div>
+        </details>
+
+        <details>
+          <summary>I opened the link from a text or Instagram</summary>
+          <div class="steps">
+            <ol>
+              <li>In-app browsers (inside Messages, Instagram, Messenger, etc.) often <strong>can't access location.</strong></li>
+              <li>Tap the <strong>•••</strong> or share icon and choose <strong>"Open in Safari"</strong> (or "Open in Chrome"), then try again.</li>
+            </ol>
+            <div class="tip">Tip: bookmark the link or Add to Home Screen so you always open it the same way.</div>
+          </div>
+        </details>
+
+      </div>
+    </details>
 
     <p class="foot">Your location is used only to confirm you're on property. It is not tracked.</p>
   </main>
