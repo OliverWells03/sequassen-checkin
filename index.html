@@ -167,7 +167,7 @@
     </div>
 
     <button id="submitBtn" disabled>Choose check-out or check-in</button>
-    <button id="recheckBtn" class="recheck" type="button" disabled>Re-check my location</button>
+    <button id="recheckBtn" class="recheck" type="button">Re-check my location</button>
 
     <div id="toast" class="toast"></div>
 
@@ -336,7 +336,6 @@ function checkLocation(){
     return;
   }
   onProperty = false;
-  recheckBtn.disabled = true;
   setLantern('searching','Checking your location…','Allow location access when your phone asks.');
   updateSubmit();
 
@@ -345,7 +344,6 @@ function checkLocation(){
       const {latitude, longitude, accuracy} = pos.coords;
       const d = distanceMeters(latitude, longitude, PROPERTY.lat, PROPERTY.lng);
       lastFix = {lat:latitude, lng:longitude, accuracy, distance:d};
-      recheckBtn.disabled = false;
       if(d <= PROPERTY.radiusMeters){
         onProperty = true;
         setLantern('ok','You\u2019re on property',
@@ -359,7 +357,6 @@ function checkLocation(){
     },
     err => {
       onProperty = false;
-      recheckBtn.disabled = false;
       let msg = 'Could not get your location.';
       if(err.code === 1) msg = 'Location permission denied. Enable it in your browser settings, then re-check.';
       else if(err.code === 2) msg = 'Location unavailable. Move to open sky and re-check.';
@@ -426,7 +423,7 @@ async function submit(){
 btnOut.addEventListener('click', () => setDirection('out'));
 btnIn.addEventListener('click',  () => setDirection('in'));
 submitBtn.addEventListener('click', submit);
-recheckBtn.addEventListener('click', checkLocation);
+recheckBtn.addEventListener('click', () => location.reload());
 window.addEventListener('load', checkLocation);
 </script>
 </body>
